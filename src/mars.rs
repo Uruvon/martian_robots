@@ -1,5 +1,5 @@
 use chrono::Utc;
-use tracing::{info, instrument, warn};
+use tracing::{instrument, warn};
 
 use crate::{
     robot::Robot,
@@ -34,8 +34,9 @@ impl Mars {
 
     #[instrument]
     fn execute_robot(robot: &mut Robot, planetary_grid: &mut Vec<Vec<char>>) {
-        let max_x = planetary_grid[0].len() as i8;
-        let max_y = planetary_grid.len() as i8;
+        // println!("=============== New Robot ===============");
+        let max_x = planetary_grid[0].len() as i8 - 1;
+        let max_y = planetary_grid.len() as i8 -1;
 
         for command in robot.command_queue.iter() {
             // Exit the loop if simulation has stopped
@@ -48,10 +49,9 @@ impl Mars {
                     robot.direction = Robot::rotate(command, robot.direction);
                 }
                 'F' => {
-                    // TODO: Check that this movement won't result in running out of the world
                     let new_coord = Robot::translate(&robot.direction, robot.coordinate);
                     let valid_move = valid_bounded_move(new_coord, max_x, max_y);
-
+                    
                     let current_cell =
                         planetary_grid[robot.coordinate[1] as usize][robot.coordinate[0] as usize];
 
@@ -61,9 +61,23 @@ impl Mars {
                         if !valid_move {
                             planetary_grid[robot.coordinate[1] as usize]
                                 [robot.coordinate[0] as usize] = 'X';
+
                             robot.is_simulating = false;
-                            print!("LOST ");
+
+                            let str_to_print = format!(
+                                "{:?} {:?} {:?} LOST ",
+                                robot.coordinate[0], robot.coordinate[1], robot.direction
+                            )
+                            .replace("'", "");
+
+                            println!("{}", str_to_print);
                         }
+
+                        robot.coordinate = new_coord;
+                    }
+
+                    // Catch case for falling valid moves that are when a robot has a scent on the current space
+                    if valid_move {
                         robot.coordinate = new_coord;
                     }
                 }
@@ -84,7 +98,7 @@ impl Mars {
                 robot.coordinate[0], robot.coordinate[1], robot.direction
             )
             .replace("'", "");
-            print!("{}", str_to_print);
+            println!("{}", str_to_print);
         }
     }
 }

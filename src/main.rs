@@ -29,10 +29,8 @@ fn main() {
         let path = path.unwrap().path();
         let path_str = path.to_str().unwrap();
 
-        print!("{} | Simulation {:?} | ", Utc::now(), i);
+        println!("{} | Simulation {:?} | ", Utc::now(), i);
         let mut mars = load_simulation_file(path_str);
         mars.simulate();
-
-        println!();
     }
 }

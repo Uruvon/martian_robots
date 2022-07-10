@@ -1,7 +1,7 @@
 use chrono::Utc;
-use tracing::{error, instrument, warn, trace, info};
+use tracing::{error, instrument, warn};
 
-use crate::{VALID_DIRECTIONS, VALID_COMMANDS};
+use crate::{VALID_COMMANDS, VALID_DIRECTIONS};
 
 /// A Struct representing a Martian exploratory robot.
 #[derive(Debug, Clone)]
@@ -20,7 +20,7 @@ pub struct Robot {
     pub direction: char,
 
     /// If this robot should be simulated.
-    /// 
+    ///
     /// Set to 'false' in the event that a robot falls off the planetary grid
     pub is_simulating: bool,
 }
@@ -106,12 +106,12 @@ impl Robot {
             coordinate: [x_coord, y_coord],
             command_queue,
             direction,
-            is_simulating: true
+            is_simulating: true,
         };
     }
 
     #[instrument]
-    pub fn rotate (input: &char, current: char) -> char {
+    pub fn rotate(input: &char, current: char) -> char {
         let cur_rot_idx = VALID_DIRECTIONS.iter().position(|&r| r == current).unwrap() as i8;
 
         match input {
@@ -119,19 +119,23 @@ impl Robot {
                 let val = cur_rot_idx as i8 - 1_i8;
 
                 if val < 0 {
-                    return VALID_DIRECTIONS[VALID_DIRECTIONS.len() - 1]
+                    return VALID_DIRECTIONS[VALID_DIRECTIONS.len() - 1];
                 }
 
                 let new_idx = val % VALID_DIRECTIONS.len() as i8;
                 return VALID_DIRECTIONS[new_idx as usize];
-            },
+            }
             'R' => {
                 let new_idx = (cur_rot_idx + 1_i8) % VALID_DIRECTIONS.len() as i8;
                 return VALID_DIRECTIONS[new_idx as usize];
-            },
+            }
             _ => {
-                warn!("{} | error processing robot, invalid rotation | {:?}", Utc::now(), input);
-                return current
+                warn!(
+                    "{} | error processing robot, invalid rotation | {:?}",
+                    Utc::now(),
+                    input
+                );
+                return current;
             }
         }
     }
@@ -139,33 +143,17 @@ impl Robot {
     #[instrument]
     pub fn translate(direction: &char, current: [i8; 2]) -> [i8; 2] {
         match direction {
-            'N' => {
-                return [
-                    current[0],
-                    current[1] + 1_i8
-                ]
-            },
-            'E' => {
-                return [
-                    current[0] + 1_i8,
-                    current[1]
-                ]
-            },
-            'S' => {
-                return [
-                    current[0],
-                    current[1] - 1_i8
-                ]
-            },
-            'W' => {
-                return [
-                    current[0] - 1_i8,
-                    current[1]
-                ]
-            },
+            'N' => return [current[0], current[1] + 1_i8],
+            'E' => return [current[0] + 1_i8, current[1]],
+            'S' => return [current[0], current[1] - 1_i8],
+            'W' => return [current[0] - 1_i8, current[1]],
             _ => {
-                warn!("{} | error processing robot, invalid translation direction | {:?}", Utc::now(), direction);
-                return current
+                warn!(
+                    "{} | error processing robot, invalid translation direction | {:?}",
+                    Utc::now(),
+                    direction
+                );
+                return current;
             }
         }
     }

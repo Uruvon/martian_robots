@@ -20,8 +20,8 @@ pub fn make_grid(y_size: i8, x_size: i8) -> Vec<Vec<char>> {
         panic!("Cannot make a grid with no Y size!")
     }
 
-    let y = if y_size > 50 { 50 } else { y_size };
-    let x = if x_size > 50 { 50 } else { x_size };
+    let y = if y_size >= 50 { 50 } else { y_size + 1 };
+    let x = if x_size >= 50 { 50 } else { x_size + 1 };
 
     return vec![vec!['O'; x as usize]; y as usize];
 }
@@ -67,9 +67,12 @@ pub fn load_simulation_file(filename: &str) -> Mars {
 
             let mut mars = Mars::new(y_size, x_size);
 
-            for idx in (1..lines.len()).step_by(2) {
-                mars.robots
-                    .push(Robot::new_from_lines(lines[idx], lines[idx + 1]));
+            let filtered_lines: Vec<&str> = lines.into_iter().filter(|l| !l.is_empty()).collect();
+            for idx in (1..filtered_lines.len()).step_by(2) {
+                mars.robots.push(Robot::new_from_lines(
+                    filtered_lines[idx],
+                    filtered_lines[idx + 1],
+                ));
             }
 
             return mars;
@@ -89,12 +92,12 @@ pub fn load_simulation_file(filename: &str) -> Mars {
 #[instrument]
 pub fn valid_bounded_move(coord: [i8; 2], max_x: i8, max_y: i8) -> bool {
     if coord[0] > max_x || coord[0] < 0 {
-        return false
+        return false;
     }
 
     if coord[1] > max_y || coord[1] < 0 {
-        return false
+        return false;
     }
 
-    return true
+    return true;
 }
