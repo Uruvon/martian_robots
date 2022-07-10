@@ -3,10 +3,8 @@ use crate::mars::Mars;
 #[cfg(test)]
 mod test;
 
-mod utils;
 mod mars;
 mod robot;
+mod utils;
 
-fn main() {
-
-}
+fn main() {}
