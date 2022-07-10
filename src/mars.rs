@@ -10,7 +10,7 @@ pub struct Mars {
 }
 
 #[instrument]
-pub fn execute_robot(robot: &mut Robot, planetary_grid: &Vec<Vec<char>>) -> Option<([usize; 2], char)> {
+pub fn execute_robot(robot: &mut Robot, planetary_grid: &Vec<Vec<char>>) -> Option<([i8; 2], char)> {
     for command in robot.command_queue.iter() {
         match command {
             'R' | 'L' => {
@@ -31,7 +31,7 @@ pub fn execute_robot(robot: &mut Robot, planetary_grid: &Vec<Vec<char>>) -> Opti
 
 impl Mars {
     #[instrument]
-    pub fn new(y_size: usize, x_size: usize) -> Self {
+    pub fn new(y_size: i8, x_size: i8) -> Self {
         return Mars {
             planetary_grid: make_grid(y_size, x_size),
             robots: Vec::new(),
@@ -53,7 +53,7 @@ impl Mars {
             if operation.is_some() {
                 let (coords, mutation) = operation.unwrap();
 
-                self.planetary_grid[coords[0]][coords[1]] = mutation;
+                self.planetary_grid[coords[0] as usize][coords[1] as usize] = mutation;
             }
         }
     }

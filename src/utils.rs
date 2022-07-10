@@ -11,7 +11,7 @@ Create a Martian Grid; with a maximum side length of 50.
 Default Character is 'O', and empty,&& unexplored space
 */
 #[instrument]
-pub fn make_grid(y_size: usize, x_size: usize) -> Vec<Vec<char>> {
+pub fn make_grid(y_size: i8, x_size: i8) -> Vec<Vec<char>> {
     if x_size == 0 {
         panic!("Cannot make a grid with no X size!")
     }
@@ -23,7 +23,7 @@ pub fn make_grid(y_size: usize, x_size: usize) -> Vec<Vec<char>> {
     let y = if y_size > 50 { 50 } else { y_size };
     let x = if x_size > 50 { 50 } else { x_size };
 
-    return vec![vec!['O'; x]; y];
+    return vec![vec!['O'; x as usize]; y as usize];
 }
 
 #[instrument]
@@ -48,7 +48,7 @@ pub fn load_simulation_file(filename: &'static str) -> Mars {
                 panic!();
             }
 
-            let x_size = usize::from_str_radix(world_configuration[0], 10).unwrap_or_else(|e| {
+            let x_size = i8::from_str_radix(world_configuration[0], 10).unwrap_or_else(|e| {
                 error!(
                     "{} | malformed input, world configuration x not a valid integer | {:?}",
                     Utc::now(),
@@ -56,7 +56,7 @@ pub fn load_simulation_file(filename: &'static str) -> Mars {
                 );
                 panic!();
             });
-            let y_size = usize::from_str_radix(world_configuration[1], 10).unwrap_or_else(|e| {
+            let y_size = i8::from_str_radix(world_configuration[1], 10).unwrap_or_else(|e| {
                 error!(
                     "{} | malformed input, world configuration y not a valid integer | {:?}",
                     Utc::now(),
