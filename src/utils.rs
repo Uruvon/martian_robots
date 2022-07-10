@@ -27,7 +27,7 @@ pub fn make_grid(y_size: i8, x_size: i8) -> Vec<Vec<char>> {
 }
 
 #[instrument]
-pub fn load_simulation_file(filename: &'static str) -> Mars {
+pub fn load_simulation_file(filename: &str) -> Mars {
     match fs::read_to_string(filename) {
         Ok(contents) => {
             let lines: Vec<&str> = contents.split("\n").collect();
