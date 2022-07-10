@@ -13,3 +13,13 @@ pub struct Robot {
     /// 'N', 'S', 'E', 'W'
     pub direction: char,
 }
+
+impl Robot {
+    pub fn new(coordinate: [usize; 2], command_queue: Vec<char>, direction: char) -> Self {
+        return Robot {
+            command_queue,
+            coordinate,
+            direction
+        };
+    }
+}

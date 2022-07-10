@@ -1,4 +1,4 @@
-use crate::{utils::make_grid, mars::Mars};
+use crate::mars::Mars;
 
 pub mod test_utils;
 
