@@ -1,7 +1,5 @@
-use std::fs;
-
-use chrono::Utc;
-use tracing::instrument;
+use std::{env, path::Path};
+use tracing::{instrument, error};
 
 use crate::utils::load_simulation_file;
 
@@ -44,19 +42,29 @@ const VALID_DIRECTIONS: [char; 4] = ['N', 'E', 'S', 'W'];
 #[instrument]
 fn main() {
     tracing_subscriber::fmt::init();
+    let args: Vec<String> = env::args().collect();
 
-    let paths = fs::read_dir("./resources").unwrap();
-
-    for (i, path) in paths
-        // Skip all non-files in target directory
-        .filter(|p| p.as_ref().unwrap().metadata().unwrap().is_file())
-        .enumerate()
-    {
-        let path = path.unwrap().path();
-        let path_str = path.to_str().unwrap();
-
-        println!("{} | Simulation {:?} | ", Utc::now(), i);
-        let mut mars = load_simulation_file(path_str);
-        mars.simulate();
+    if !Path::new(&args[1]).exists() {
+        error!("{} | invalid 1st argument passes | bad filename, does not exists", args[1]);
+        panic!();
     }
+
+    let mut mars = load_simulation_file(&args[1]);
+    mars.simulate();
+
+    // Optionally, use this code to simply iterate through all simulations in a given folder
+    // let paths = fs::read_dir("./resources").unwrap();
+
+    // for (i, path) in paths
+    //     // Skip all non-files in target directory
+    //     .filter(|p| p.as_ref().unwrap().metadata().unwrap().is_file())
+    //     .enumerate()
+    // {
+    //     let path = path.unwrap().path();
+    //     let path_str = path.to_str().unwrap();
+
+    //     println!("{} | Simulation {:?} | ", Utc::now(), i);
+    //     let mut mars = load_simulation_file(path_str);
+    //     mars.simulate();
+    // }
 }
