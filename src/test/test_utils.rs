@@ -42,6 +42,7 @@ pub fn test_load_simulation_simple() {
   let mars = load_simulation_file("resources/test/test_input_simple.txt");
   assert!(mars.planetary_grid.len() == 3);
   assert!(mars.planetary_grid[0].len() == 5);
+  assert!(mars.robots.len() == 1);
 }
 
 #[test]
