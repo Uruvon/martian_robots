@@ -6,9 +6,9 @@ pub struct Mars {
 }
 
 impl Mars {
-  pub fn new (side_length: usize) -> Self {
+  pub fn new (y_size: usize, x_size: usize) -> Self {
     return Mars {
-      planetary_grid: make_grid(side_length),
+      planetary_grid: make_grid(y_size, x_size),
       robots: Vec::new(),
     }
   }
