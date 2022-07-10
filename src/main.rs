@@ -11,7 +11,7 @@ mod utils;
 
 const VALID_COMMANDS: [char; 3] = ['L', 'R', 'F'];
 const VALID_DIRECTIONS: [char; 4] = ['N', 'E', 'S', 'W'];
-const FILENAME: &'static str = "resources/basic_input_left.txt";
+const FILENAME: &'static str = "resources/basic_input_right.txt";
 
 #[instrument]
 fn main() {

@@ -85,3 +85,16 @@ pub fn load_simulation_file(filename: &'static str) -> Mars {
         }
     }
 }
+
+#[instrument]
+pub fn valid_bounded_move(coord: [i8; 2], max_x: i8, max_y: i8) -> bool {
+    if coord[0] > max_x || coord[0] < 0 {
+        return false
+    }
+
+    if coord[1] > max_y || coord[1] < 0 {
+        return false
+    }
+
+    return true
+}

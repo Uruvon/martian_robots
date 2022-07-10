@@ -18,6 +18,11 @@ pub struct Robot {
     /// Possible directions are:
     /// 'N', 'S', 'E', 'W'
     pub direction: char,
+
+    /// If this robot should be simulated.
+    /// 
+    /// Set to 'false' in the event that a robot falls off the planetary grid
+    pub is_simulating: bool,
 }
 
 impl Robot {
@@ -101,6 +106,7 @@ impl Robot {
             coordinate: [x_coord, y_coord],
             command_queue,
             direction,
+            is_simulating: true
         };
     }
 
@@ -130,6 +136,7 @@ impl Robot {
         }
     }
 
+    #[instrument]
     pub fn translate(direction: &char, current: [i8; 2]) -> [i8; 2] {
         match direction {
             'N' => {
