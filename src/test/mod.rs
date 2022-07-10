@@ -1,17 +1,6 @@
 use crate::{utils::make_grid, mars::Mars};
 
-#[test]
-pub fn test_make_grid() {
-  let side_25 = make_grid(25, 25);
-  assert_eq!(side_25.len(), 25);
-  assert_eq!(side_25[0].len(), 25);
-  assert_eq!(side_25[0][5], 'O');
-
-  let side_over = make_grid(55, 55);
-  assert_eq!(side_over.len(), 50);
-  assert_eq!(side_over[0].len(), 50);
-  assert_eq!(side_over[25][5], 'O');
-}
+pub mod test_utils;
 
 #[test]
 pub fn test_new_mars() {
