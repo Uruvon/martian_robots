@@ -1,9 +1,10 @@
 use chrono::Utc;
-use tracing::{error, instrument};
+use tracing::{error, instrument, warn, trace, info};
 
 use crate::{VALID_DIRECTIONS, VALID_COMMANDS};
 
 /// A Struct representing a Martian exploratory robot.
+#[derive(Debug, Clone)]
 pub struct Robot {
     pub command_queue: Vec<char>,
 
@@ -101,5 +102,31 @@ impl Robot {
             command_queue,
             direction,
         };
+    }
+
+    #[instrument]
+    pub fn rotate <'a> (input: &char, current: char) -> char {
+        let cur_rot_idx = VALID_DIRECTIONS.iter().position(|&r| r == current).unwrap();
+
+        match input {
+            'L' => {
+                let val = cur_rot_idx as i64 - 1_i64;
+
+                if val < 0 {
+                    return VALID_DIRECTIONS[VALID_DIRECTIONS.len() - 1]
+                }
+
+                let new_idx = val as usize % VALID_DIRECTIONS.len();
+                return VALID_DIRECTIONS[new_idx as usize];
+            },
+            'R' => {
+                let new_idx = (cur_rot_idx + 1_usize) % VALID_DIRECTIONS.len();
+                return VALID_DIRECTIONS[new_idx];
+            },
+            _ => {
+                warn!("{} | error processing robot, invalid rotation | {:?}", Utc::now(), input);
+                return current
+            }
+        }
     }
 }
