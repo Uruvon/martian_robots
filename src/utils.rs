@@ -97,6 +97,10 @@ pub fn load_simulation_file(filename: &'static str) -> Mars {
 				}
 
 				let command_queue: Vec<char> = robot_commands.chars().collect();
+				if command_queue.len() > 100 || command_queue.len() == 0 {
+					error!("{} | malformed input, robot command queue is an invalid length| {:?}", Utc::now(), command_queue.len());
+					panic!();
+				}
 				let robot = Robot::new(
 					[x_coord, y_coord],
 					command_queue,
@@ -109,7 +113,7 @@ pub fn load_simulation_file(filename: &'static str) -> Mars {
 			return mars
 		},
 		Err(e) => { 
-			error!("{} | could not load file contents | {:?}", Utc::now(), filename);
+			error!("{} | could not load file contents | {:?} | {:?}", Utc::now(), filename, e);
 			panic!();
 		}
 	}
